@@ -4,93 +4,88 @@ export default createStore({
   state: {
     books: [
       {
-        name: "Book 1",
-        author: "author 1",
+        title: "SNOWFLAKES",
+        author: "James Smith",
         price: 100,
         status: 0,
       },
       {
-        name: "Book 2",
-        author: "author 2",
+        title: "DREAMCATCHER",
+        author: "Emily Johnson",
         price: 200,
         status: 0,
       },
       {
-        name: "Book 3",
-        author: "author 3",
+        title: "HEARTBEATS",
+        author: "Benjamin Brown",
         price: 300,
         status: 0,
       },
       {
-        name: "Book 4",
-        author: "author 4",
+        title: "NIGHTMARES",
+        author: "Sophia Lee",
         price: 400,
         status: 0,
       },
       {
-        name: "Book 5",
-        author: "author 5",
+        title: "AFTERMATHS",
+        author: "Daniel White",
         price: 500,
         status: 0,
       },
       {
-        name: "Book 6",
-        author: "author 6",
+        title: "RAINDROPS",
+        author: "Olivia Clark",
         price: 600,
         status: 0,
       },
       {
-        name: "Book 7",
-        author: "author 7",
+        title: "STARLIGHT",
+        author: "Matthew Davis",
         price: 700,
         status: 0,
       },
       {
-        name: "Book 8",
-        author: "author 8",
+        title: "FIREWORKS",
+        author: "Isabella Martinez",
         price: 800,
         status: 0,
       },
       {
-        name: "Book 9",
-        author: "author 9",
+        title: "BUTTERFLY",
+        author: "Alexander Wilson",
         price: 900,
         status: 0,
       },
       {
-        name: "Book 10",
-        author: "author 10",
+        title: "MOONLIGHT",
+        author: "Lily Moore",
         price: 1000,
         status: 0,
       },
     ],
+    cart: [],
   },
   getters: {
-    salesBooks: (state) => {
-      let salesBooks = state.books.map((book) => {
-        return {
-          name: book.name,
-          author: book.author,
-          price: book.price / 2,
-        };
+    availableBooks: (state) => {
+      return state.books.filter((book) => {
+        return book.status == 0;
       });
-
-      return salesBooks;
     },
   },
   mutations: {
-    reducePrice: (state) => {
-      state.books.forEach((book) => {
-        book.price -= 10;
-      });
-    },
+    // reducePrice: (state) => {
+    //   state.books.forEach((book) => {
+    //     book.price -= 10;
+    //   });
+    // },
   },
   actions: {
-    reducePrice: (context) => {
-      setTimeout(() => {
-        context.commit("reducePrice");
-      }, 3000);
-    },
+    // reducePrice: (context) => {
+    //   setTimeout(() => {
+    //     context.commit("reducePrice");
+    //   }, 3000);
+    // },
   },
   modules: {},
 });

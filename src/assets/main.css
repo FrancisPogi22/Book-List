@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  outline: none !important;
+}
+
+section {
+  display: flex;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+:root {
+  --global-purple: #673de6;
+  --global-purple-hover: #5025d1;
+  --global-text: #ffffff;
+  --global-black: #000000;
+  --global-gray: #e2e5e9;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 100%;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  transition: 0.2s;
+}
+
+h2 {
+  font-size: 40px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  line-height: 1.3em;
+}
+
+h4 {
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  line-height: 1.4em;
+}
+
+p {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.4em;
+}
