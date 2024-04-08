@@ -13,8 +13,8 @@
             <div class="books-details">
               <h4>{{ book.title }}</h4>
               <p>{{ book.author }}</p>
-              <p>$ {{ book.price }}</p>
-              <button @click="addToCart(book)">
+              <p>₱{{ book.price }}</p>
+              <button @click="addToCart(index)">
                 <i class="bi bi-cart"></i>
                 Add to Cart
               </button>
@@ -34,8 +34,8 @@ export default {
     },
   },
   methods: {
-    addToCart(book) {
-      this.$store.dispatch('addToCart', book);
+    addToCart(index) {
+      this.$store.dispatch("addToCart", index);
     },
   },
 };

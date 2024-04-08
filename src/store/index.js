@@ -75,10 +75,27 @@ export default createStore({
     cartList: (state) => {
       return state.cart;
     },
+    totalCost: (state) => {
+      return state.cart.reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0);
+    },
   },
   mutations: {
-    addToCart: (state, book) => {
-      state.cart.push({ book });
+    addToCart: (state, index) => {
+      let existingItem = state.cart.find(
+          (item) => item.title == state.books[index].title
+        ),
+        item = state.books[index];
+
+      existingItem
+        ? existingItem.quantity++
+        : state.cart.push({
+            title: item.title,
+            author: item.author,
+            price: item.price,
+            quantity: 1,
+          });
     },
     removeItem: (state, index) => {
       state.cart.splice(index, 1);

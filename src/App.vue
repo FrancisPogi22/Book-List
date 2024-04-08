@@ -105,5 +105,6 @@ export default {
 
 #header .header-con .cart-btn {
   border-radius: 4px;
+  color: var(--global-black);
 }
 </style>
