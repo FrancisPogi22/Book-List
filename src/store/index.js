@@ -72,20 +72,25 @@ export default createStore({
         return book.status == 0;
       });
     },
+    cartList: (state) => {
+      return state.cart;
+    },
   },
   mutations: {
-    // reducePrice: (state) => {
-    //   state.books.forEach((book) => {
-    //     book.price -= 10;
-    //   });
-    // },
+    addToCart: (state, book) => {
+      state.cart.push({ book });
+    },
+    removeItem: (state, index) => {
+      state.cart.splice(index, 1);
+    },
   },
   actions: {
-    // reducePrice: (context) => {
-    //   setTimeout(() => {
-    //     context.commit("reducePrice");
-    //   }, 3000);
-    // },
+    addToCart: ({ commit }, book) => {
+      commit("addToCart", book);
+    },
+    removeItem: ({ commit }, index) => {
+      commit("removeItem", index);
+    },
   },
   modules: {},
 });

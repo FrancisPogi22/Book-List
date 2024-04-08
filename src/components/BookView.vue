@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     addToCart(book) {
-      this.$store.state.cart.push({ book });
+      this.$store.dispatch('addToCart', book);
     },
   },
 };
