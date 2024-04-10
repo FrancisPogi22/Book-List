@@ -4,8 +4,7 @@
       <div class="cart-con">
         <div class="cart-header">
           <div class="check-con">
-            <input type="checkbox" />
-            <p>Product</p>
+            <p>Cart Item's</p>
           </div>
         </div>
         <div class="cart-widget-con">
@@ -15,7 +14,7 @@
             :key="index"
           >
             <div class="cart-details">
-              <input type="checkbox" />
+              <input type="checkbox" v-model="item.isSelected" />
               <img src="../assets/Books.jpg" alt="Image" />
               <p>{{ item.title }}</p>
             </div>
@@ -42,7 +41,7 @@
         <p>
           Total ({{ countItem }} item): <span>₱{{ totalCost }}</span>
         </p>
-        <button>Check Out</button>
+        <button @click="checkOut()">Check Out</button>
       </div>
     </div>
   </section>
@@ -50,31 +49,67 @@
 
 <script>
 export default {
+  data() {
+    return {
+      checkOutList: [],
+    };
+  },
   methods: {
     removeBook(index) {
       this.$store.dispatch("removeItem", index);
     },
     incrementQuantity(index) {
+      let cartStorage = JSON.parse(localStorage.getItem("cart"));
+
+      cartStorage[index].quantity += 1;
       this.$store.getters.cartList[index].quantity += 1;
+      localStorage.setItem("cart", JSON.stringify(cartStorage));
     },
     decrementQuantity(index) {
-      let item = this.$store.getters.cartList[index];
+      let cartStorage = JSON.parse(localStorage.getItem("cart")),
+        item = this.$store.getters.cartList[index];
 
-      if (item.quantity > 1) item.quantity -= 1;
+      if (item.quantity > 1) {
+        item.quantity -= 1;
+        cartStorage[index].quantity -= 1;
+        localStorage.setItem("cart", JSON.stringify(cartStorage));
+      }
     },
     checkQuantity(item) {
       if (item.quantity < 0 || item.quantity == 0) item.quantity = 1;
     },
+    checkOut() {
+      let cartStorage = JSON.parse(localStorage.getItem("cart")),
+        checkOutList = this.$store.getters.cartList.filter(
+          (item) => item.isSelected
+        ),
+        user = localStorage.getItem("token");
+
+      cartStorage = cartStorage.filter(
+        (cartItem) =>
+          cartItem.owner == user &&
+          !checkOutList.some((item) => item.title == cartItem.title)
+      );
+      localStorage.setItem("cart", JSON.stringify(cartStorage));
+      this.$store.state.cartList = cartStorage;
+      this.$store.dispatch("checkOut", cartStorage);
+    },
   },
   computed: {
     countItem() {
-      return this.$store.getters.cartList.length;
+      return this.$store.getters.cartList.filter((item) => item.isSelected)
+        .length;
     },
     cartList() {
       return this.$store.getters.cartList;
     },
     totalCost() {
-      return this.$store.getters.totalCost;
+      return this.cartList.reduce((obj, item) => {
+        if (item.isSelected) {
+          return obj + item.price * item.quantity;
+        }
+        return obj;
+      }, 0);
     },
   },
 };
@@ -141,6 +176,11 @@ input::-webkit-inner-spin-button {
   width: 50px;
   padding: 10px;
   border: 1px solid var(--global-gray);
+}
+
+#cart input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
 }
 
 #cart .quantity-con {

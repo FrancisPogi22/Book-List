@@ -20,6 +20,7 @@ section {
   --global-purple-hover: #5025d1;
   --global-text: #ffffff;
   --global-black: #000000;
+  --global-secondary: #666666;
   --global-gray: #e2e5e9;
   --global-red: #ef4444;
 }
@@ -57,4 +58,27 @@ p {
 
 body {
   background: #f5f5f5;
+}
+
+.toast {
+  opacity: 1 !important;
+  box-shadow: none !important;
+}
+
+.toast-title,
+.toast-message {
+  color: var(--color-white);
+}
+
+.toast-success {
+  background: #28a745;
+}
+
+.toast-info {
+  background: var(--color-purple);
+}
+
+.toast-title,
+.toast-message {
+  font-size: 14px;
 }

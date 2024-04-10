@@ -1,7 +1,9 @@
 import { createStore } from "vuex";
+import router from "@/router";
 
 export default createStore({
   state: {
+    isLoggedIn: !!localStorage.getItem("token"),
     books: [
       {
         title: "SNOWFLAKES",
@@ -64,7 +66,7 @@ export default createStore({
         status: 0,
       },
     ],
-    cart: [],
+    cart: getCartFromLocalStorage(localStorage.getItem("token")),
   },
   getters: {
     availableBooks: (state) => {
@@ -80,25 +82,50 @@ export default createStore({
         return total + item.price * item.quantity;
       }, 0);
     },
+    isLoggedIn: (state) => {
+      return state.isLoggedIn;
+    },
   },
   mutations: {
     addToCart: (state, index) => {
       let existingItem = state.cart.find(
-          (item) => item.title == state.books[index].title
-        ),
-        item = state.books[index];
+        (item) => item.title == state.books[index].title
+      );
 
-      existingItem
-        ? existingItem.quantity++
-        : state.cart.push({
-            title: item.title,
-            author: item.author,
-            price: item.price,
+      if (existingItem) {
+        existingItem.quantity++;
+        localStorage.setItem("cart", JSON.stringify(state.cart));
+      } else {
+        let cartLocal = JSON.parse(localStorage.getItem("cart")),
+          owner = localStorage.getItem("token"),
+          productItem = {
+            title: state.books[index].title,
+            author: state.books[index].author,
+            price: state.books[index].price,
             quantity: 1,
-          });
+            owner: owner,
+          };
+        cartLocal.push(productItem);
+        state.cart.push(productItem);
+        localStorage.setItem("cart", JSON.stringify(cartLocal));
+      }
     },
     removeItem: (state, index) => {
+      let cartStorage = JSON.parse(localStorage.getItem("cart"));
+
+      cartStorage.splice(index, 1);
       state.cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cartStorage));
+    },
+    loginSuccess(state) {
+      state.cart = getCartFromLocalStorage(localStorage.getItem("token"));
+      state.isLoggedIn = true;
+    },
+    logout(state) {
+      state.isLoggedIn = false;
+    },
+    checkOut(state, cartStorage) {
+      state.cart = cartStorage;
     },
   },
   actions: {
@@ -108,6 +135,39 @@ export default createStore({
     removeItem: ({ commit }, index) => {
       commit("removeItem", index);
     },
+    checkOut({ commit }, cartStorage) {
+      commit("checkOut", cartStorage);
+    },
+    login({ commit }, account) {
+      let accounts = JSON.parse(localStorage.getItem("accounts")),
+        existingAccount = accounts.find(
+          (acc) =>
+            acc.email == account.email && acc.password == account.password
+        );
+
+      if (existingAccount) {
+        localStorage.setItem("token", existingAccount.email);
+        commit("loginSuccess");
+      }
+
+      router.push({ name: "book-list" });
+    },
+    logout({ commit }) {
+      localStorage.removeItem("token");
+      commit("logout");
+      router.push({ name: "login" });
+    },
   },
   modules: {},
 });
+
+function getCartFromLocalStorage(owner) {
+  const cart = localStorage.getItem("cart");
+
+  if (cart) {
+    const cartItems = JSON.parse(cart);
+    return cartItems.filter((item) => item.owner == owner);
+  } else {
+    return [];
+  }
+}

@@ -2,16 +2,23 @@
   <section id="header">
     <div class="wrapper">
       <div class="header-con">
-        <img src="./assets/Logo.png" alt="Logo" />
-        <div class="search-con">
-          <input type="text" placeholder="Search book title..." />
-          <button class="btn"><i class="bi bi-search"></i></button>
-        </div>
-        <div class="side-nav">
-          <RouterLink to="/" class="view-all btn">View All Books</RouterLink>
+        <RouterLink to="/book-list">
+          <img src="./assets/Logo.png" alt="Logo" />
+        </RouterLink>
+        <div class="side-nav" v-if="checkCredentials()">
+          <RouterLink to="/book-list" class="view-all btn"
+            >View All Books</RouterLink
+          >
           <RouterLink to="/cart" class="cart-btn btn">
             <i class="bi bi-cart"> </i>
           </RouterLink>
+          <button @click="$store.dispatch('logout')" class="logout-btn btn">
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+        </div>
+        <div v-if="!checkCredentials()" class="authenticate-nav">
+          <RouterLink to="/" class="login btn">Login</RouterLink>
+          <RouterLink to="/register" class="register btn">Register</RouterLink>
         </div>
       </div>
     </div>
@@ -28,6 +35,11 @@ export default {
     RouterLink,
     RouterView,
   },
+  methods: {
+    checkCredentials() {
+      return this.$store.getters.isLoggedIn;
+    },
+  },
 };
 </script>
 
@@ -43,6 +55,11 @@ export default {
 #header .wrapper {
   max-width: 1640px;
   width: 100%;
+}
+
+#header .authenticate-nav {
+  display: flex;
+  align-items: center;
 }
 
 #header .header-con {
@@ -64,21 +81,8 @@ export default {
   width: 50px;
 }
 
-#header .header-con input {
-  border-radius: 4px;
-  border: 1px solid var(--global-gray);
-  border-radius: 4px 0 0 4px;
-  font-family: "Montserrat", sans-serif;
-  padding: 15px;
-  width: 500px;
-}
-
 #header .header-con .search-con .btn {
   border-radius: 0 4px 4px 0;
-}
-
-#header .header-con .search-con {
-  display: flex;
 }
 
 #header .btn {
@@ -87,6 +91,16 @@ export default {
   padding: 10px 15px;
   background: transparent;
   border: 1px solid var(--global-gray);
+}
+
+#header .register,
+#header .login {
+  font-family: "Montserrat", sans-serif;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  font-size: 14px;
+  color: var(--global-purple);
 }
 
 #header .btn i {
@@ -103,7 +117,8 @@ export default {
   font-family: "Montserrat", sans-serif;
 }
 
-#header .header-con .cart-btn {
+#header .header-con .cart-btn,
+#header .header-con .logout-btn {
   border-radius: 4px;
   color: var(--global-black);
 }

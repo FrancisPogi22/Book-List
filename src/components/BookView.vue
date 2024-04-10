@@ -2,11 +2,20 @@
   <section id="books">
     <div class="wrapper">
       <div class="books-con">
-        <h2>Books</h2>
+        <div class="books-header-con">
+          <h2>Books</h2>
+          <div class="search-con">
+            <input
+              type="text"
+              placeholder="Search book title..."
+              v-model="bookTitle"
+            />
+          </div>
+        </div>
         <div class="books-con-list">
           <div
             class="books-widget"
-            v-for="(book, index) in availableBooks"
+            v-for="(book, index) in filteredBooks"
             :key="index"
           >
             <img src="../assets/Books.jpg" alt="Logo" />
@@ -28,14 +37,35 @@
     
 <script>
 export default {
+  data() {
+    return {
+      bookTitle: "",
+    };
+  },
   computed: {
-    availableBooks() {
+    filteredBooks() {
+      if (this.bookTitle) {
+        return this.$store.getters.availableBooks.filter((book) =>
+          book.title.toLowerCase().includes(this.bookTitle.toLowerCase())
+        );
+      }
       return this.$store.getters.availableBooks;
     },
   },
+  beforeCreate() {
+    if (!localStorage.getItem("cart"))
+      localStorage.setItem("cart", JSON.stringify([]));
+  },
   methods: {
-    addToCart(index) {
-      this.$store.dispatch("addToCart", index);
+    addToCart(book) {
+      if (this.$store.getters.isLoggedIn) {
+        this.$store.dispatch("addToCart", book);
+      } else {
+        alert("Please Login");
+      }
+    },
+    searchBook() {
+      this.list = this.$store.getters.availableBooks;
     },
   },
 };
@@ -134,5 +164,20 @@ export default {
 
 #books .books-details button i {
   margin-right: 10px;
+}
+
+#books .books-header-con {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#books .books-header-con input {
+  border-radius: 4px;
+  border: 1px solid var(--global-gray);
+  border-radius: 4px;
+  font-family: "Montserrat", sans-serif;
+  padding: 15px;
+  width: 500px;
 }
 </style>
