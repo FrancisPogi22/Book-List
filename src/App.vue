@@ -24,6 +24,7 @@
     </div>
   </section>
   <RouterView />
+  <notifications position="bottom left" />
 </template>
 
 <script>
@@ -91,6 +92,11 @@ export default {
   padding: 10px 15px;
   background: transparent;
   border: 1px solid var(--global-gray);
+  transition: 0.2s;
+}
+
+#header .btn:hover {
+  color: #5025d1;
 }
 
 #header .register,

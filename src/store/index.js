@@ -148,9 +148,11 @@ export default createStore({
       if (existingAccount) {
         localStorage.setItem("token", existingAccount.email);
         commit("loginSuccess");
+        router.push({ name: "book-list" });
+        return true;
+      } else {
+        return false;
       }
-
-      router.push({ name: "book-list" });
     },
     logout({ commit }) {
       localStorage.removeItem("token");

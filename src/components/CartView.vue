@@ -4,7 +4,7 @@
       <div class="cart-con">
         <div class="cart-header">
           <div class="check-con">
-            <p>Cart Item's</p>
+            <p>Cart Item(s)</p>
           </div>
         </div>
         <div class="cart-widget-con">
@@ -57,6 +57,11 @@ export default {
   methods: {
     removeBook(index) {
       this.$store.dispatch("removeItem", index);
+      this.$notify({
+        title: "Online Bookstore Application",
+        type: "success",
+        text: `"${this.$store.state.cart[index].title}" has been successfully removed from your cart.`,
+      });
     },
     incrementQuantity(index) {
       let cartStorage = JSON.parse(localStorage.getItem("cart"));
@@ -93,6 +98,11 @@ export default {
       localStorage.setItem("cart", JSON.stringify(cartStorage));
       this.$store.state.cartList = cartStorage;
       this.$store.dispatch("checkOut", cartStorage);
+      this.$notify({
+        title: "Online Bookstore Application",
+        type: "success",
+        text: " Your item(s) have been successfully checked out.",
+      });
     },
   },
   computed: {
@@ -213,6 +223,10 @@ input::-webkit-inner-spin-button {
   padding: 10px 20px;
 }
 
+#cart .action-btn button:hover {
+  background: #dc2626;
+}
+
 #cart .check-out-con {
   display: flex;
   justify-content: flex-end;
@@ -232,6 +246,10 @@ input::-webkit-inner-spin-button {
   background: var(--global-purple);
   color: var(--global-text);
   border-radius: 4px;
+}
+
+#cart .check-out-con button:hover {
+  background: #5025d1;
 }
 
 #cart .check-out-con:before {

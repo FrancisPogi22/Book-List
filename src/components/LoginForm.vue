@@ -5,13 +5,23 @@
         <div class="login-form-con">
           <h2>Login</h2>
           <form @submit.prevent="login()">
-            <input type="text" placeholder="email" v-model="email" />
-            <input type="password" placeholder="password" v-model="password" />
+            <div class="field-con">
+              <input type="text" placeholder="email" v-model="email" />
+              <span class="error">{{ emailError }}</span>
+            </div>
+            <div class="field-con">
+              <input
+                type="password"
+                placeholder="password"
+                v-model="password"
+              />
+              <span class="error">{{ passwordError }}</span>
+            </div>
             <div class="btn-con">
               <RouterLink to="/register" class="register"
                 >Don't have account? register here</RouterLink
               >
-              <button type="submit">Login</button>
+              <button type="submit" class="btn">Login</button>
             </div>
           </form>
         </div>
@@ -30,14 +40,49 @@ export default {
     return {
       email: "",
       password: "",
+      emailError: "",
+      passwordError: "",
     };
   },
   methods: {
+    validateForm() {
+      let isValid = true;
+
+      this.emailError = "";
+      this.passwordError = "";
+      this.emailError = !this.email
+        ? "Email is required."
+        : !/\S+@\S+\.\S+/.test(this.email)
+        ? "Please enter a valid email."
+        : "";
+      this.passwordError = !this.password
+        ? "Password is required."
+        : this.password.length < 6
+        ? "Password must be at least 6 characters long."
+        : "";
+
+      isValid = isValid && !this.emailError && !this.passwordError;
+
+      return isValid;
+    },
     login() {
-      this.$store.dispatch("login", {
-        email: this.email,
-        password: this.password,
-      });
+      if (!this.validateForm()) return;
+
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((result) => {
+          if (!result) {
+            this.$notify({
+              title: "Online Bookstore Application",
+              type: "error",
+              text: "Incorrect Credentails.",
+            });
+            this.password = "";
+          }
+        });
     },
   },
 };
@@ -57,6 +102,21 @@ export default {
   text-align: center;
 }
 
+#login .login-con form button:hover {
+  background: #5025d1;
+}
+
+#login .login-con form .error {
+  font-size: 10px;
+  color: #ef4444;
+  font-style: italic;
+  font-family: "Montserrat", sans-serif;
+}
+
+#login .login-con .field-con {
+  text-align: left;
+}
+
 #login .login-form-con {
   border: 1px solid var(--global-gray);
   width: 500px;
@@ -72,6 +132,7 @@ export default {
 
 #login .login-con form input {
   padding: 10px;
+  width: 100%;
   border: 1px solid var(--global-gray);
   border-radius: 4px;
 }
@@ -84,6 +145,7 @@ export default {
 }
 
 #login .register {
+  color: var(--global-purple);
   font-style: italic;
 }
 

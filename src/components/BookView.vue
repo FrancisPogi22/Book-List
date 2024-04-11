@@ -57,12 +57,13 @@ export default {
       localStorage.setItem("cart", JSON.stringify([]));
   },
   methods: {
-    addToCart(book) {
-      if (this.$store.getters.isLoggedIn) {
-        this.$store.dispatch("addToCart", book);
-      } else {
-        alert("Please Login");
-      }
+    addToCart(index) {
+      this.$store.dispatch("addToCart", index);
+      this.$notify({
+        title: "Online Bookstore Application",
+        type: "success",
+        text: `"${this.$store.getters.availableBooks[index].title}" has been successfully added to your cart.`,
+      });
     },
     searchBook() {
       this.list = this.$store.getters.availableBooks;
