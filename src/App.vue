@@ -3,7 +3,7 @@
     <div class="wrapper">
       <div class="header-con">
         <RouterLink to="/book-list">
-          <img src="./assets/Logo.png" alt="Logo" />
+          <img src="./assets/logo.png" alt="Logo" />
         </RouterLink>
         <div class="side-nav" v-if="checkCredentials()">
           <RouterLink to="/book-list" class="view-all btn"
