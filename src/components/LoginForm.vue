@@ -6,20 +6,20 @@
           <h2>Login</h2>
           <form @submit.prevent="login()">
             <div class="field-con">
-              <input type="text" placeholder="email" v-model="email" />
+              <input type="text" placeholder="Email Address" v-model="email" />
               <span class="error">{{ emailError }}</span>
             </div>
             <div class="field-con">
               <input
                 type="password"
-                placeholder="password"
+                placeholder="Password"
                 v-model="password"
               />
               <span class="error">{{ passwordError }}</span>
             </div>
             <div class="btn-con">
               <RouterLink to="/register" class="register"
-                >Don't have account? register here</RouterLink
+                >Don't have account? Register here</RouterLink
               >
               <button type="submit" class="btn">Login</button>
             </div>
