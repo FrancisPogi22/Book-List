@@ -21,15 +21,15 @@
             <div class="cart-action-con">
               <p>₱{{ item.price }}</p>
               <div class="quantity-con">
-                <button @click="incrementQuantity(index)">+</button>
+                <button @click="decrementQuantity(index)">-</button>
                 <input
                   type="number"
                   v-model="item.quantity"
                   @blur="checkQuantity(item)"
                 />
-                <button @click="decrementQuantity(index)">-</button>
+                <button @click="incrementQuantity(index)">+</button>
               </div>
-              <p>₱{{ item.price }}</p>
+              <p>₱{{ item.price * item.quantity }}</p>
               <div class="action-btn">
                 <button @click="removeBook(index)">Remove</button>
               </div>
@@ -56,11 +56,12 @@ export default {
   },
   methods: {
     removeBook(index) {
+      const removedItem = this.$store.state.cart[index];
       this.$store.dispatch("removeItem", index);
       this.$notify({
         title: "Online Bookstore Application",
         type: "success",
-        text: `"${this.$store.state.cart[index].title}" has been successfully removed from your cart.`,
+        text: `"${removedItem.title}" has been successfully removed from your cart.`,
       });
     },
     incrementQuantity(index) {
