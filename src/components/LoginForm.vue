@@ -78,7 +78,7 @@ export default {
             this.$notify({
               title: "Online Bookstore Application",
               type: "error",
-              text: "Incorrect Credentails.",
+              text: "Incorrect Credentials.",
             });
             this.password = "";
           }
